@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8">
+    <title>ECharts</title>
+</head>
+<body>
+    <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+    <div id="main" style="height:1000px"></div>
+    <!-- ECharts单文件引入 -->
+    <script src="http://echarts.baidu.com/build/dist/echarts.js"></script>
+    <script type="text/javascript">
+        // 路径配置
+        require.config({
+            paths: {
+                echarts:"http://echarts.baidu.com/build/dist"
+            }
+        });
+
+function createRandomItemStyle() {
+    return {
+        normal: {
+            color: 'rgb(' + [
+                Math.round(Math.random() * 160),
+                Math.round(Math.random() * 160),
+                Math.round(Math.random() * 160)
+            ].join(',') + ')'
+        }
+    };
+}
+require(
+    [
+        'echarts',
+        'echarts/chart/wordCloud'
+    ],
+    function (ec) {
+        var myChart = ec.init(document.getElementById('main'));
+        myChart.setOption(option);
+    }
+);
+option = {
+    title: {
+        text: 'Girls Interest',
+        link: 'http://www.google.com/trends/hottrends'
+    },
+    tooltip: {
+        show: true
+    },
+    series: [{
+        name: 'Gils Interest',
+        type: 'wordCloud',
+        size: ['100%', '100%'],
+        textRotation : [0, 45, 90, -45],
+        textPadding: 0,
+        autoSize: {
+            enable: true,
+            minSize: 14
+        },
+        data:[
+        {% for entry in entries %}
+            {
+                name:'{{entry}}',
+                value:{{ entries[entry]}},
+                itemStyle: createRandomItemStyle()
+            },
+        {% endfor %}
+        ]
+    }]
+}
+
+    </script>
+</body>
