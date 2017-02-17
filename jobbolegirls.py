@@ -13,21 +13,55 @@ def intrest():
     import re
     import xiangqin as xq
     import jieba
-    jieba.load_userdict("userdict.txt")
+    #jieba.load_userdict("userdict.txt")
     content=xq.getIntrest()
 
     l=re.split(r'(?:,|;|；|！|，|、|。|\s)\s*', content)
+    l.remove('')
     dictIntrest={}
+    print('len'+str(len(l)))
     for i in l :
-        seg_list=jieba.cut(str(i), cut_all=False)
-        for word in seg_list:
-            if word not in dictIntrest.keys():
-                dictIntrest[word]=1
-            else:
-                dictIntrest[word]=int(dictIntrest[word])+1
+        for j in l:
+            samecount=0
+            diffcount=0
+            if len(i)<=2:
+                for x in i:
+                    if x in j :
+                        samecount=samecount+1
+                    if samecount==2:
+                        if i not in dictIntrest.keys():
+                            dictIntrest[i]=1
+                        else:
+                            dictIntrest[i]=int(dictIntrest[i])+1
+                        l.remove(j)
+                        break
+            elif len(i)>2:
+                for x in i:
+                    if x in j :
+                        samecount=samecount+1
+                    else:
+                        diffcount=diffcount+1
+                if samecount>diffcount:
+                    if i not in dictIntrest.keys():
+                        dictIntrest[i]=1
+                    else:
+                        dictIntrest[i]=int(dictIntrest[i])+1
+                    l.remove(j)
+
+        # seg_list=jieba.cut(str(i), cut_all=False)
+        # for word in seg_list:
+        #     if word not in dictIntrest.keys():
+        #         dictIntrest[word]=1
+        #     else:
+        #         dictIntrest[word]=int(dictIntrest[word])+1
     #print (len(dictIntrest.keys()))
-    print (dictIntrest)
-    return  render_template('echart.html',entries = dictIntrest)
+    dictcopy={}
+    for key in dictIntrest.keys():
+        if int(dictIntrest[key])==1:
+            pass
+        else:
+            dictcopy[key]=int(dictIntrest[key])*10
+    return  render_template('echart.html',entries = dictcopy)
 
 if __name__ == '__main__':
     app.run()

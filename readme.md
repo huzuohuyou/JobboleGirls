@@ -9,3 +9,5 @@
 ![](http://i.imgur.com/4fEx1uX.jpg)
 - 分词后
 ![](http://i.imgur.com/ju0JQlc.jpg)
+- 分词效果仍然不够理想自己又单独写了一个算法进行需求聚合
+![](http://i.imgur.com/wZBxOoi.jpg)
