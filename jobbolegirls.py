@@ -4,11 +4,9 @@ from flask import Flask, request, session, g, redirect, url_for, abort, \
 app = Flask(__name__)
 
 
-@app.route('/')
-def hello_world():
-    return 'Hello World!'
 
-@app.route('/intrest')
+
+@app.route('/')
 def intrest():
     import re
     import xiangqin as xq
@@ -21,6 +19,7 @@ def intrest():
     dictIntrest={}
     print('len'+str(len(l)))
     for i in l :
+        group=[]
         for j in l:
             samecount=0
             diffcount=0
@@ -34,6 +33,7 @@ def intrest():
                         else:
                             dictIntrest[i]=int(dictIntrest[i])+1
                         l.remove(j)
+                        group.append(j)
                         break
             elif len(i)>2:
                 for x in i:
@@ -47,7 +47,8 @@ def intrest():
                     else:
                         dictIntrest[i]=int(dictIntrest[i])+1
                     l.remove(j)
-
+                    group.append(j)
+        print('*******group:'+str(group))
         # seg_list=jieba.cut(str(i), cut_all=False)
         # for word in seg_list:
         #     if word not in dictIntrest.keys():
