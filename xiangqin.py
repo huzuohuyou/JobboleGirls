@@ -89,17 +89,13 @@ def getIntrest():
     return content
 
 def fixValue(value):
-    if '170' in value:
-        return r'.*170.*'
-    if '175' in value:
-        return  r'.*175.*'
-    if '爱心' in value:
-        return  r'.*爱心.*'
-    if '不抽烟' in value:
-        return  r'.*不抽烟.*'
-    if '上进心' in value:
-        return  r'.*上进心.*'
+    maininfo=['170','175','爱心','不抽烟','上进心']
+    for item in maininfo:
+        if item in maininfo:
+            print('key'+item)
+            return item
     return value
+
 
 if __name__ == '__main__':
     # i=1

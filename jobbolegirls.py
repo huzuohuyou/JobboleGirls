@@ -12,14 +12,19 @@ def hello_world():
 def intrest():
     import re
     import xiangqin as xq
+    import jieba
+    jieba.load_userdict("userdict.txt")
     content=xq.getIntrest()
 
     l=re.split(r'(?:,|;|；|！|，|、|。|\s)\s*', content)
     dictIntrest={}
     for i in l :
-        #i=fixValue(i)
-        if i not in dictIntrest.keys() and i!='':
-            dictIntrest[i]=l.count(i)
+        seg_list=jieba.cut(str(i), cut_all=False)
+        for word in seg_list:
+            if word not in dictIntrest.keys():
+                dictIntrest[word]=1
+            else:
+                dictIntrest[word]=int(dictIntrest[word])+1
     #print (len(dictIntrest.keys()))
     print (dictIntrest)
     return  render_template('echart.html',entries = dictIntrest)
