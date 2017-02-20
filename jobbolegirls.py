@@ -3,21 +3,32 @@ from flask import Flask, request, session, g, redirect, url_for, abort, \
 
 app = Flask(__name__)
 
-
-
+def cut(l):
+    import jieba
+    import  codecs
+    jieba.load_userdict("userdict.txt")
+    fr = codecs.open ( 'words.txt', 'a', 'utf_8' )
+    for item in l:
+        seg_list=jieba.cut(str(item),cut_all=False)
+        words =''
+        for word in seg_list:
+            words+= word+'\t'
+        fr.write(words+'\n')
+    fr.close()
 
 @app.route('/')
 def intrest():
     import re
     import xiangqin as xq
-    import jieba
-    #jieba.load_userdict("userdict.txt")
+
+
     content=xq.getIntrest()
 
     l=re.split(r'(?:,|;|；|！|，|、|。|\s)\s*', content)
     l.remove('')
     dictIntrest={}
-    print('len'+str(len(l)))
+
+
     for i in l :
         group=[]
         for j in l:
@@ -48,7 +59,7 @@ def intrest():
                         dictIntrest[i]=int(dictIntrest[i])+1
                     l.remove(j)
                     group.append(j)
-        print('*******group:'+str(group))
+        #print('*******group:'+str(group))
         # seg_list=jieba.cut(str(i), cut_all=False)
         # for word in seg_list:
         #     if word not in dictIntrest.keys():
