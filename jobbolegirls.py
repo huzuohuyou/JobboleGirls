@@ -6,8 +6,8 @@ app = Flask(__name__)
 def cut(l):
     import jieba
     import  codecs
-    jieba.load_userdict("userdict.txt")
-    fr = codecs.open ( 'words.txt', 'a', 'utf_8' )
+    #jieba.load_userdict("userdict.txt")
+    fr = codecs.open ( 'words.txt', 'w', 'utf_8' )
     for item in l:
         seg_list=jieba.cut(str(item),cut_all=False)
         words =''
@@ -16,57 +16,43 @@ def cut(l):
         fr.write(words+'\n')
     fr.close()
 
+def getGroups():
+    from apriori import getRules
+    rules=getRules()
+    groups=[]
+    for itemset in rules:
+        tempset=[]
+        for item in itemset[:-1]:
+            #print(str for str in item)
+            tempset.extend([str for str in item ])
+        groups.append(tempset)
+    return groups
+
 @app.route('/')
 def intrest():
-    import re
     import xiangqin as xq
+    import jieba
 
-
-    content=xq.getIntrest()
-
-    l=re.split(r'(?:,|;|；|！|，|、|。|\s)\s*', content)
-    l.remove('')
+    groups = getGroups()
     dictIntrest={}
+    l=xq.getIntrest()
+    print(groups)
+    log=[]
+    for group in groups:
+        one=[]
+        for i in l :
+            if not [False for value in group if value not in list(jieba.cut(i))] :
+                one.append(i)
+                if i not in dictIntrest.keys():
+                    dictIntrest[i]=1
+                else:
+                    dictIntrest[i]=int(dictIntrest[i])+1
+            else:
+                pass
+        log.append(one)
+                #print('group:'+str(list(group))+'\t'+str(list(jieba.cut(i))))
 
-
-    for i in l :
-        group=[]
-        for j in l:
-            samecount=0
-            diffcount=0
-            if len(i)<=2:
-                for x in i:
-                    if x in j :
-                        samecount=samecount+1
-                    if samecount==2:
-                        if i not in dictIntrest.keys():
-                            dictIntrest[i]=1
-                        else:
-                            dictIntrest[i]=int(dictIntrest[i])+1
-                        l.remove(j)
-                        group.append(j)
-                        break
-            elif len(i)>2:
-                for x in i:
-                    if x in j :
-                        samecount=samecount+1
-                    else:
-                        diffcount=diffcount+1
-                if samecount>diffcount:
-                    if i not in dictIntrest.keys():
-                        dictIntrest[i]=1
-                    else:
-                        dictIntrest[i]=int(dictIntrest[i])+1
-                    l.remove(j)
-                    group.append(j)
-        #print('*******group:'+str(group))
-        # seg_list=jieba.cut(str(i), cut_all=False)
-        # for word in seg_list:
-        #     if word not in dictIntrest.keys():
-        #         dictIntrest[word]=1
-        #     else:
-        #         dictIntrest[word]=int(dictIntrest[word])+1
-    #print (len(dictIntrest.keys()))
+    print(item for item in log)
     dictcopy={}
     for key in dictIntrest.keys():
         if int(dictIntrest[key])==1:

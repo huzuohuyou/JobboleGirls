@@ -85,8 +85,16 @@ def getIntrest():
     content=''
     for row in csv_reader:
         content+=str(row[-2])+','+str(row[-3])
-        print(str(row[-2])+str(row[-3]))
-    return content
+        #print(str(row[-2])+str(row[-3]))
+    l=re.split(r'(?:,|;|；|！|，|、|。|（|）|\)|\(|\s)\s*', content)
+    ret =  [str for str in l if str not in ['', ' ', None]]
+    #l=l.remove('')
+    #print(ret)
+    fr = codecs.open ( 'items.txt', 'w', 'utf_8' )
+    for item in ret:
+        fr.write(item +'\n')
+    fr.close()
+    return ret
 
 def fixValue(value):
     maininfo=['170','175','爱心','不抽烟','上进心']
@@ -96,41 +104,40 @@ def fixValue(value):
             return item
     return value
 
+def getContent():
+    i=1
+    content=''
+    while(i<=15):
+        url="http://date.jobbole.com/page/{page}/".format(page=str(i))
+        print(url)
+        content+=getGils(url)
+        i=i+1
+    fr = codecs.open ( 'content.txt', 'w', 'utf_8' )
+    fr.write(content)
+
+def getDetails():
+    fr = codecs.open ( 'content.txt', 'r' , 'utf-8')
+    rows=[]
+    index=0
+    while 1:
+        line = fr.readline()
+        if not line:
+            break
+        print(line)
+        row=getDetail(line.split('\t')[0])
+        if len(row)==15:
+            index=index+1
+            print(index)
+            rows.append(row)
+
+    path='details.csv'
+    header=['出生年与','身高','所在城市','籍贯','职业','父母情况','是否是独生子女','收入描述','兴趣爱好','是否接受异地恋','打算几年内结婚','要几个小孩','最低要求是','特殊要求是','一句话']
+    write_csv_file(path,None,rows)
 
 if __name__ == '__main__':
-    # i=1
-    # content=''
-    # while(i<=15):
-    #     url="http://date.jobbole.com/page/{page}/".format(page=str(i))
-    #     print(url)
-    #     content+=getGils(url)
-    #     i=i+1
-    # fr = codecs.open ( 'content.txt', 'w', 'utf_8' )
-    # fr.write(content)
-
-    # fr = codecs.open ( 'content.txt', 'r' , 'utf-8')
-    # rows=[]
-    # index=0
-    # while 1:
-    #     line = fr.readline()
-    #     if not line:
-    #         break
-    #     print(line)
-    #     row=getDetail(line.split('\t')[0])
-    #     if len(row)==15:
-    #         index=index+1
-    #         print(index)
-    #         rows.append(row)
-    #
-    # path='details.csv'
-    # header=['出生年与','身高','所在城市','籍贯','职业','父母情况','是否是独生子女','收入描述','兴趣爱好','是否接受异地恋','打算几年内结婚','要几个小孩','最低要求是','特殊要求是','一句话']
-    # write_csv_file(path,None,rows)
-
-    content=getIntrest()
-    print(re.split(r'(?:,|;|；|！|，|、|。|\s)\s*', content))
-    print(len(re.split(r'(?:,|;|；|！|，|、|。|\s)\s*', content)))
-
-    l=re.split(r'(?:,|;|；|！|，|、|。|\s)\s*', content)
+    #getContent()
+    #getDetails()
+    l= getIntrest()
     dictIntrest={}
     for i in l :
         #i=fixValue(i)

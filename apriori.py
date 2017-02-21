@@ -124,16 +124,16 @@ def pntRules(ruleList, itemMeaning):
         print ("confidence: %f" % ruleTup[2])
         print ()      #print a blank line
 
+def getRules():
+    dataSet=loadDataSet()
+    L,suppData=apriori(dataSet,0.0035)
+    print('L:'+str(L))
+    rules=generateRules(L,suppData,0.8)
+    return  rules
+
 if __name__ == '__main__':
     dataSet=loadDataSet()
-    C1=createC1(dataSet)
-    #print('>>>C1:'+str(list(C1)))
-    D=map(set,dataSet)
-    L1,superData0=scanD(D,C1,0.35522234156820623)
-    #print('>>>D:'+str(list(D)))
-    print('L1:'+str(list(L1)))
-    print('len L1:'+str(len(list(L1))))
-    L,suppData=apriori(dataSet,0.005)
+    L,suppData=apriori(dataSet,0.0035)
     print('L:'+str(L))
     rules=generateRules(L,suppData,0.8)
     print('rules:'+str(rules))
