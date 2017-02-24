@@ -39,34 +39,55 @@ def qiangshafa(url):
     print(r.read().decode('utf-8'))
 
 def hasnews():
-    ssl._create_default_https_context = ssl._create_unverified_context
-    import http.client,datetime
-    conn = http.client.HTTPSConnection('my.oschina.net')
-    conn.request("GET", "/xxiaobian/blog")
-    sourp=BeautifulSoup(conn.getresponse().read(),'lxml')
-    gilslist=sourp.find_all(class_='time')
-    import time
-    #if(time.strftime("%Y/%m/%d", time.localtime()) ==str(gilslist[0].get_text().strip().replace('发布','').strip())):
-    if('2017/02/25' ==str(gilslist[0].get_text().strip().replace('发布','').strip())):
-        return str(sourp.find_all(class_='blog-title',limit=1)[0]['href'])
-    else:
-        print(time.strftime("%H:%M", time.localtime()))
-        if time.strftime("%H:%M", time.localtime())=='23:59':
-            print('sleep 2 second ...')
-            time.sleep(2)
-        else :
-            date_str=datetime.datetime.now().strftime("%Y-%m-%d 23:59:50")
-            endtime=datetime.datetime.strptime(date_str,"%Y-%m-%d %H:%M:%S")
-            now=datetime.datetime.now()
-            print('endtime:{end} now:{now}'.format(end=endtime,now=now))
-            interval=(endtime-now)
-            sec = interval.days*24*3600 + interval.seconds
-            print('need sleep {second} second ...'.format(second=abs(sec)))
-            time.sleep(abs(sec))
-        hasnews()
-        print(time.strftime("%Y/%m/%d %H:%M:%S", time.localtime()))
-
+    try:
+        ssl._create_default_https_context = ssl._create_unverified_context
+        import http.client,datetime
+        conn = http.client.HTTPSConnection('my.oschina.net')
+        conn.request("GET", "/xxiaobian/blog")
+        sourp=BeautifulSoup(conn.getresponse().read(),'lxml')
+        gilslist=sourp.find_all(class_='time')
+        import time
+        #if(time.strftime("%Y/%m/%d", time.localtime()) ==str(gilslist[0].get_text().strip().replace('发布','').strip())):
+        if('2017/02/25' ==str(gilslist[0].get_text().strip().replace('发布','').strip())):
+            return str(sourp.find_all(class_='blog-title',limit=1)[0]['href'])
+        else:
+            print(time.strftime("%Y-%m-%d", time.localtime()))
+            if time.strftime("%Y-%m-%d", time.localtime())=='2017-02-25':
+                print('sleep 2 second ...')
+                time.sleep(2)
+            else :
+                date_str=datetime.datetime.now().strftime("%Y-%m-%d 23:59:50")
+                endtime=datetime.datetime.strptime(date_str,"%Y-%m-%d %H:%M:%S")
+                now=datetime.datetime.now()
+                print('endtime:{end} now:{now}'.format(end=endtime,now=now))
+                interval=(endtime-now)
+                sec = interval.days*24*3600 + interval.seconds
+                print('need sleep {second} second ...'.format(second=abs(sec)))
+                time.sleep(abs(sec))
+            hasnews()
+            print(time.strftime("%Y/%m/%d %H:%M:%S", time.localtime()))
+    except ValueError as e:
+        sendEmail('发生异常了！'+str(e))
        # sourp.find_all(class_='blog-title',limit=1)['href']
+
+
+
+def sendEmail(message):
+    from email.mime.text import MIMEText
+    msg = MIMEText(message, 'plain', 'utf-8')
+    from_addr = '13126506430@163.com'
+    password = 'whl05043016'
+    # 输入收件人地址:
+    to_addr = '13126506430@163.com'
+    # 输入SMTP服务器地址:
+    smtp_server = 'smtp.163.com'
+
+    import smtplib
+    server = smtplib.SMTP(smtp_server, 25) # SMTP协议默认端口是25
+    server.set_debuglevel(1)
+    server.login(from_addr, password)
+    server.sendmail(from_addr, [to_addr], msg.as_string())
+    server.quit()
 
 if __name__ == '__main__':
     import http.client,datetime
@@ -76,6 +97,4 @@ if __name__ == '__main__':
     #https://my.oschina.net/action/blog/add_comment?blog=797134"
     #https://my.oschina.net/xxiaobian/blog/844061
     qiangshafa(url)
-
-
-
+    sendEmail('over'+str(datetime.datetime.now()))
