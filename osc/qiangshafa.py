@@ -18,7 +18,7 @@ def qiangshafa(url):
     ssl._create_default_https_context = ssl._create_unverified_context
     #url = "https://my.oschina.net/action/blog/add_comment?blog=797134"
     postdata =urllib.parse.urlencode({
-    "content":"我是谁？,我在哪？我在干什么？"
+    "content":"抢沙发大作战开始！"
     }).encode('utf-8')
     header = {
     "Accept": "application/json, text/javascript, */*; q=0.01",
@@ -40,26 +40,42 @@ def qiangshafa(url):
 
 def hasnews():
     ssl._create_default_https_context = ssl._create_unverified_context
-    import http.client
+    import http.client,datetime
     conn = http.client.HTTPSConnection('my.oschina.net')
     conn.request("GET", "/xxiaobian/blog")
     sourp=BeautifulSoup(conn.getresponse().read(),'lxml')
     gilslist=sourp.find_all(class_='time')
     import time
     #if(time.strftime("%Y/%m/%d", time.localtime()) ==str(gilslist[0].get_text().strip().replace('发布','').strip())):
-    if('2017/02/24' ==str(gilslist[0].get_text().strip().replace('发布','').strip())):
+    if('2017/02/25' ==str(gilslist[0].get_text().strip().replace('发布','').strip())):
         return str(sourp.find_all(class_='blog-title',limit=1)[0]['href'])
     else:
-        time.sleep(3)
-        print(time.strftime("%Y/%m/%d %H:%M:%S", time.localtime()))
+        print(time.strftime("%H:%M", time.localtime()))
+        if time.strftime("%H:%M", time.localtime())=='23:59':
+            print('sleep 2 second ...')
+            time.sleep(2)
+        else :
+            date_str=datetime.datetime.now().strftime("%Y-%m-%d 23:59:50")
+            endtime=datetime.datetime.strptime(date_str,"%Y-%m-%d %H:%M:%S")
+            now=datetime.datetime.now()
+            print('endtime:{end} now:{now}'.format(end=endtime,now=now))
+            interval=(endtime-now)
+            sec = interval.days*24*3600 + interval.seconds
+            print('need sleep {second} second ...'.format(second=abs(sec)))
+            time.sleep(abs(sec))
         hasnews()
+        print(time.strftime("%Y/%m/%d %H:%M:%S", time.localtime()))
+
        # sourp.find_all(class_='blog-title',limit=1)['href']
 
 if __name__ == '__main__':
+    import http.client,datetime
     id = hasnews().split('/')[-1]
     url="https://my.oschina.net/action/blog/add_comment?blog={id}".format(id=id)
     #print(url)
     #https://my.oschina.net/action/blog/add_comment?blog=797134"
     #https://my.oschina.net/xxiaobian/blog/844061
     qiangshafa(url)
+
+
 
