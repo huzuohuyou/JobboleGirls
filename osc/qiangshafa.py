@@ -38,8 +38,10 @@ def qiangshafa(url):
     r = opener.open(req)
     print(r.read().decode('utf-8'))
 
+flag=False
 def hasnews():
     try:
+        global flag
         ssl._create_default_https_context = ssl._create_unverified_context
         import http.client,datetime
         conn = http.client.HTTPSConnection('my.oschina.net')
@@ -52,10 +54,11 @@ def hasnews():
             return str(sourp.find_all(class_='blog-title',limit=1)[0]['href'])
         else:
             print(time.strftime("%Y-%m-%d", time.localtime()))
-            if time.strftime("%Y-%m-%d", time.localtime())=='2017-02-25':
+            if flag:
                 print('sleep 2 second ...')
                 time.sleep(2)
             else :
+                flag=True
                 date_str=datetime.datetime.now().strftime("%Y-%m-%d 23:59:50")
                 endtime=datetime.datetime.strptime(date_str,"%Y-%m-%d %H:%M:%S")
                 now=datetime.datetime.now()
