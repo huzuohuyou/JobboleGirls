@@ -61,7 +61,7 @@ def hasnews(preid):
                 time.sleep(2)
             else :
                 flag=True
-                date_str=datetime.datetime.now().strftime("%Y-%m-%d 23:50:50")
+                date_str=datetime.datetime.now().strftime("%Y-%m-%d 23:40:50")
                 endtime=datetime.datetime.strptime(date_str,"%Y-%m-%d %H:%M:%S")
                 now=datetime.datetime.now()
                 print('endtime:{end} now:{now}'.format(end=endtime,now=now))
