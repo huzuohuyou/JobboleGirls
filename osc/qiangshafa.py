@@ -38,7 +38,7 @@ def qiangshafa(url):
     opener = urllib.request.build_opener(
         urllib.request.HTTPCookieProcessor(cj))
     r = opener.open(req)
-    print(r.read().decode('utf-8'))
+    return r.read().decode('utf-8')
 
 flag = False
 
@@ -135,5 +135,4 @@ if __name__ == '__main__':
     # https://my.oschina.net/action/blog/add_comment?blog=797134"
     # https://my.oschina.net/xxiaobian/blog/844061
     print(url)
-    qiangshafa(url)
-    #sendEmail('over \t'+url+'\t'+str(datetime.datetime.now()))
+    sendEmail('url:{2}\ntime{0}\nresult:{1}'.format(str(datetime.datetime.now()),qiangshafa(url)),url)
