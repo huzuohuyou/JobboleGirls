@@ -127,6 +127,7 @@ if __name__ == '__main__':
         preid = None
     while id == None:
         id = hasnews(preid)
+        print(id)
     f = open('dump.txt', 'wb')
     pickle.dump(log(id), f)
     f.close()
@@ -135,4 +136,4 @@ if __name__ == '__main__':
     # https://my.oschina.net/action/blog/add_comment?blog=797134"
     # https://my.oschina.net/xxiaobian/blog/844061
     print(url)
-    sendEmail('url:{2}\ntime{0}\nresult:{1}'.format(str(datetime.datetime.now()),qiangshafa(url)),url)
+    sendEmail('url:{2}\ntime{0}\nresult:{1}'.format(str(datetime.datetime.now()),qiangshafa(url),url))
