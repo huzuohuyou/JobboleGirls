@@ -7,6 +7,11 @@ import requests
 from bs4 import BeautifulSoup
 import re
 import codecs
+import http.client
+import datetime
+import pickle
+import os
+import smtplib
 '''
 作者：吴海龙
 OSC乱弹抢沙发
@@ -14,12 +19,14 @@ OSC乱弹抢沙发
 2.使用python urllib https进行发送数据
 '''
 
+flag = False
+id=None
 
 def qiangshafa(url):
     ssl._create_default_https_context = ssl._create_unverified_context
-    #url = "https://my.oschina.net/action/blog/add_comment?blog=797134"
+    # url = "https://my.oschina.net/action/blog/add_comment?blog=797134"
     postdata = urllib.parse.urlencode({
-        "content": "抢沙发大作战开始！"
+        "content": "沙发是我的，总有一天"
     }).encode('utf-8')
     header = {
         "Accept": "application/json, text/javascript, */*; q=0.01",
@@ -40,9 +47,6 @@ def qiangshafa(url):
     r = opener.open(req)
     return r.read().decode('utf-8')
 
-flag = False
-
-
 def hasnews(preid):
     try:
         global flag
@@ -54,12 +58,18 @@ def hasnews(preid):
         sourp = BeautifulSoup(conn.getresponse().read(), 'lxml')
         gilslist = sourp.find_all(class_='time')
         import time
-        id = str(sourp.find_all(class_='blog-title', limit=1)
-                 [0]['href']).split('/')[-1]
-        if preid == None:
-            return id
-        if id != str(preid):
-            return str(sourp.find_all(class_='blog-title', limit=1)[0]['href'])
+        print("********************pre_id******************************")
+        print(preid)
+        print("********************new_url*****************************")
+        new_url = sourp.find_all(class_='blog-title', limit=1)[0]['href']
+        print(new_url)
+        print("********************new_id******************************")
+        new_id = str(new_url.split('/')[-1])
+        print(new_id)
+        if(str(preid)==None):
+            return new_id
+        if new_id != str(preid):
+            return new_id
         else:
             print(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) +
                   str(gilslist[0].get_text().strip().replace('发布', '').strip()))
@@ -67,39 +77,34 @@ def hasnews(preid):
                 print('sleep 2 second ...')
                 time.sleep(2)
             else:
-                flag = True
-                date_str = datetime.datetime.now().strftime("%Y-%m-%d 23:40:50")
-                endtime = datetime.datetime.strptime(
+                flag=True
+                date_str=datetime.datetime.now().strftime("%Y-%m-%d 23:40:50")
+                endtime=datetime.datetime.strptime(
                     date_str, "%Y-%m-%d %H:%M:%S")
-                now = datetime.datetime.now()
+                now=datetime.datetime.now()
                 print('endtime:{end} now:{now}'.format(end=endtime, now=now))
-                interval = (endtime-now)
-                sec = interval.days*24*3600 + interval.seconds
+                interval=(endtime-now)
+                sec=interval.days*24*3600 + interval.seconds
                 print('need sleep {second} second ...'.format(second=abs(sec)))
                 time.sleep(sec)
             return None
-            # hasnews()
-            # print(time.strftime("%Y/%m/%d %H:%M:%S", time.localtime()))
     except ValueError as e:
         sendEmail('发生异常了！'+str(e))
-        fr = open('log.txt')
+        fr=open('log.txt')
         fr.write(str(e))
         fr.close()
-       # sourp.find_all(class_='blog-title',limit=1)['href']
 
 
 def sendEmail(message):
     from email.mime.text import MIMEText
-    msg = MIMEText(message, 'plain', 'utf-8')
-    from_addr = '13126506430@163.com'
-    password = 'whl05043016'
+    msg=MIMEText(message, 'plain', 'utf-8')
+    from_addr='13126506430@163.com'
+    password='whl05043016'
     # 输入收件人地址:
-    to_addr = '13126506430@163.com'
+    to_addr='13126506430@163.com'
     # 输入SMTP服务器地址:
-    smtp_server = 'smtp.163.com'
-
-    import smtplib
-    server = smtplib.SMTP(smtp_server, 25)  # SMTP协议默认端口是25
+    smtp_server='smtp.163.com'
+    server=smtplib.SMTP(smtp_server, 25)  # SMTP协议默认端口是25
     server.set_debuglevel(1)
     server.login(from_addr, password)
     server.sendmail(from_addr, [to_addr], msg.as_string())
@@ -107,33 +112,30 @@ def sendEmail(message):
 
 
 class log():
-
     def __init__(self, id):
-        self.id = id
-id = None
+        self.id=id
+
 if __name__ == '__main__':
     global id
-    import http.client
-    import datetime
-    import pickle
-    import os
     if os.path.exists('dump.txt'):
-        f = open('dump.txt', 'rb')
-        logid = pickle.load(f)
-        preid = logid.id.split('/')[-1]
+        f=open('dump.txt', 'rb')
+        logid=pickle.load(f)
+        preid=logid.id.split('/')[-1]
         f.close()
         print('preid is '+str(preid))
     else:
-        preid = None
+        preid=None
     while id == None:
-        id = hasnews(preid)
+        id=hasnews(preid)
         print(id)
-    f = open('dump.txt', 'wb')
+    f=open('dump.txt', 'wb')
     pickle.dump(log(id), f)
     f.close()
-    url = "https://my.oschina.net/action/blog/add_comment?blog={id}".format(
-        id=id.split('/')[-1])
+    url="https://my.oschina.net/action/blog/add_comment?blog={new_id}".format(
+        new_id=id)
     # https://my.oschina.net/action/blog/add_comment?blog=797134"
     # https://my.oschina.net/xxiaobian/blog/844061
+    print("********************有新动弹了******************************")
     print(url)
-    sendEmail('url:{2}\ntime{0}\nresult:{1}'.format(str(datetime.datetime.now()),qiangshafa(url),url))
+    sendEmail('url:{2}\ntime{0}\nresult:{1}'.format(
+        str(datetime.datetime.now()), qiangshafa(url), url))
