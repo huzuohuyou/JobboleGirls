@@ -1,3 +1,4 @@
+# -*- coding: UTF-8 -*-
 __author__ = 'hailong'
 '''
 清除网易云音乐没有互粉的脚本
@@ -47,7 +48,6 @@ def getNoMutal(params,enSecKey):
              '092; __csrf=8c133a69f9cbf30a37e04ef55af6444f; __utma=94650624.1809290275.1472952435.1479036584.1488084383.5; __utmb=' \
              '94650624.11.10.1488084383; __utmc=94650624; __utmz=94650624.1472952435.1.1.utmcsr=baidu|utmccn=(organic)|utmcmd=organic'}
     r = requests.post('http://music.163.com/weapi/user/getfollows/112272936?csrf_token=8c133a69f9cbf30a37e04ef55af6444f', data=data, headers=headers)
-    print(r.text)
     import json
     data = json.loads(r.text)
     defollows=[]
@@ -136,23 +136,94 @@ def iphoneGetFollows():
     # print('defollows:'+str(defollows))
     # return defollows
 
+def follow(uid):
+    data = {'params': 'cSAWen9spxccEE493UwmCo6T+kKCAHyURYZ6qCoZJlhMRqFTVMKHOoP23y82ELVcWPXCXe1Z3mMCORMsLcGC31D8M9I8iSRllxNGtZb7t+w+h6Z/tmwvUt+G0X8VGQxSI/wXOkrFyiEulM7fAvIGtA==',
+            'encSecKey':'aa327fc9a32650fc298c6b586334e7898cda82222648b104673eb26d7f579985f73c3356f6acc382550517fa93d39245096c3bc612813a022493cd53440413513b7c4bab1c2d7aad09576f7f3a86d3ea00199d3f0ba655df78acde6c170b0254a5151c4e7c126a443f58c769ebba8514ead029bbee57cffd9c5fbd301675dbba'}
+    header={
+    #'POST http://music.163.com/weapi/user/delfollow/127028008?csrf_token=8c133a69f9cbf30a37e04ef55af6444f HTTP/1.1'
+    'Host':' music.163.com',
+    'Connection':' keep-alive',
+    'Content-Length':' 442',
+    'Origin':' http://music.163.com',
+    'User-Agent':' Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.110 Safari/537.36',
+    'Content-Type':' application/x-www-form-urlencoded',
+    'Accept':' */*',
+    'Referer':' http://music.163.com/user/fans?id=448875860',
+    'Accept-Encoding':' gzip, deflate',
+    'Accept-Language':' zh-CN,zh;q=0.8',
+    'Cookie':' vjuids=48ee6d7e7.154708c8d48.0.e47a1ade127ee; _ntes_nnid=4e55d0db288b793b80c224f24edb7b40,1462177140046; _ntes_nu'
+            'id=4e55d0db288b793b80c224f24edb7b40; __gads=ID=1360325d4099a926:T=1462177139:S=ALNI_MauUMT_xiutG499sdbI9AydEJT2Cg; NETEASE'
+            '_WDA_UID=112272936#|#1450712246404; vjlast=1462177140.1483862690.21; vinfo_n_f_l_n3=769bcc6c42f59ff3.1.5.1462177140055.147'
+            '0573193421.1483864116572; usertrack=c+5+hlie4kF0DnRnDIQzAg==; NTES_SESS=o_x36IW6dtLGoJJgfDcuC6PafzDOxT2kUYe3vCEBv0APxaw1xYb'
+            'LveIipTTdOSYfgBMxa3jjmDaIM2vyLVlXMkuYVoqbmraqXaoymEjmGLlknUjVkrY3SzoLnbZ9T61sFHdBCC8Fmeg8BgQj23Oy6XMOo0EnZXIFsHGlk0XW6t_zar'
+            '.kqpN_oOQKL; S_INFO=1488083416|0|2&90##|m13126506430; P_INFO=m13126506430@163.com|1488083416|0|other|00&99|bej&1488083396&ma'
+            'il_client#bej&null#10#0#0|131430&1||13126506430@163.com; ANTICSRF=740c013b756c55e88df6123d564dac27; mail_psc_fingerprint=b1f'
+            '9b6b3e6ee9300a1f4b9c1c101bd8a; MUSIC_EMAIL_U=831b5c2232a641e00e7fed3e753184255053be85f4706fa6a830726bb445a259216e71553eda245'
+            'df498575063635afb07242b041a0830c37955a739ab43dce1; BOX_DISA vjuids=48ee6d7e7.154708c8d48.0.e47a1ade127ee; __gads=ID=1360325d4099a926:T=1462177139:S=ALNI_MauUMT_xiutG499sdbI9AydEJT2Cg; usertrack=c+5+hlie4kF0DnRnDIQzAg==; mail_psc_fingerprint=b1f9b6b3e6ee9300a1f4b9c1c101bd8a; _ga=GA1.2.1041944114.1489410211; _ntes_nnid=4e55d0db288b793b80c224f24edb7b40,1493819000318; _ntes_nuid=4e55d0db288b793b80c224f24edb7b40; P_INFO=m13126506430@163.com|1495634125|0|other|00&99|nmg&1495608520&mail_client#nmg&null#10#0#0|131430&1|urs|13126506430@163.com; vjlast=1462177140.1498355251.12; vinfo_n_f_l_n3=769bcc6c42f59ff3.1.8.1462177140055.1498355280102.1498657028081; JSESSIONID-WYYY=FapqYpVhTefSNOrbcsrmlmgtqSDnERou7I6W%5COV0PJPVZTZoUINDxM%2B%2BQcw8XaOAWTs01hMxIzBIAxJOTI0KMQDZt1YmnoInCkaxhfUijHA3%5CqKeSE0zEUU1FFaVnRkEceJKdkU0JiUS4AcS7mnXJrz36aDIre1RHYcDTdxF8lRK6gYU%3A1500107489977; _iuqxldmzr_=32; MUSIC_U=f3a31190fec5ba90312fe67780e5f7493e1ec2f33ddc610f189fcfb11e2665bbb850fdd20e5e7aeb7a686d84cb29cce031b299d667364ed3; __remember_me=true; __csrf=5049c156baa19bf136d9aabcf70a7672; __utma=94650624.1809290275.1472952435.1500041905.1500105690.12; __utmb=94650624.9.10.1500105690; __utmc=94650624; __utmz=94650624.1500105690.12.7.utmcsr=baidu|utmccn=(organic)|utmcmd=organic'
+    }
+    url='http://music.163.com/weapi/user/follow/{uid}?csrf_token=5049c156baa19bf136d9aabcf70a7672'.format(uid=uid)
+    #print('url:'+url)
+    r = requests.post(url,data=data,headers=header)
+    print(r.text)
+
+# def getfollows():
+#     data = {'params': 'Ijh9dRAG/vgS68BbMwinNVpBm4NInJaIEB3P+rqPv0euBq7VWstkdZ2YQ9LODBKZF5f8yWrHmfngie0jaRZ3u+YlVGI77nm5BkTjd1rn0AJWFtVpIqfdv4txiNcuLQ/hBzFFQPgkKFP5xKdr5TkaNn9CmTz/D1sCGZLj2wgT8IO95AiM2r2YjrXFm3bKGa/xZbXbFBv34orfdI83wzgLw==',
+#             'encSecKey':'52f73863cdd9938630358c5c6ef72a474c7d2e76b2b172d6a544959845954c099cc9c1d157d79c89258a8cc0f5abfc3ae37a903f881e31d6cb0a07e790511e6862c3592977868b3fb9972182324ba1dfa005c1f20a051bcf52eba9d03baaf53c7f06a0fcb52c27df6cc662b48e1bf568de123cc91d891d68de0b6660448c1db9'}
+#     header={
+#     #'POST http://music.163.com/weapi/user/delfollow/127028008?csrf_token=8c133a69f9cbf30a37e04ef55af6444f HTTP/1.1'
+#     'Host':' music.163.com',
+#     'Connection':' keep-alive',
+#     'Content-Length':' 438',
+#     'Origin':' http://music.163.com',
+#     'User-Agent':' Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.110 Safari/537.36',
+#     'Content-Type':' application/x-www-form-urlencoded',
+#     'Accept':' */*',
+#     'Referer':'http://music.163.com/user/fans?id=326667469',
+#     'Accept-Encoding':' gzip, deflate',
+#     'Accept-Language':' zh-CN,zh;q=0.8',
+#     'Cookie':' vjuids=48ee6d7e7.154708c8d48.0.e47a1ade127ee; _ntes_nnid=4e55d0db288b793b80c224f24edb7b40,1462177140046; _ntes_nu'
+#             'id=4e55d0db288b793b80c224f24edb7b40; __gads=ID=1360325d4099a926:T=1462177139:S=ALNI_MauUMT_xiutG499sdbI9AydEJT2Cg; NETEASE'
+#             '_WDA_UID=112272936#|#1450712246404; vjlast=1462177140.1483862690.21; vinfo_n_f_l_n3=769bcc6c42f59ff3.1.5.1462177140055.147'
+#             '0573193421.1483864116572; usertrack=c+5+hlie4kF0DnRnDIQzAg==; NTES_SESS=o_x36IW6dtLGoJJgfDcuC6PafzDOxT2kUYe3vCEBv0APxaw1xYb'
+#             'LveIipTTdOSYfgBMxa3jjmDaIM2vyLVlXMkuYVoqbmraqXaoymEjmGLlknUjVkrY3SzoLnbZ9T61sFHdBCC8Fmeg8BgQj23Oy6XMOo0EnZXIFsHGlk0XW6t_zar'
+#             '.kqpN_oOQKL; S_INFO=1488083416|0|2&90##|m13126506430; P_INFO=m13126506430@163.com|1488083416|0|other|00&99|bej&1488083396&ma'
+#             'il_client#bej&null#10#0#0|131430&1||13126506430@163.com; ANTICSRF=740c013b756c55e88df6123d564dac27; mail_psc_fingerprint=b1f'
+#             '9b6b3e6ee9300a1f4b9c1c101bd8a; MUSIC_EMAIL_U=831b5c2232a641e00e7fed3e753184255053be85f4706fa6a830726bb445a259216e71553eda245'
+#             'df498575063635afb07242b041a0830c37955a739ab43dce1; BOX_DISABLE=true; playliststatus=visible; __remember_me=true; MUSIC_U=f3a'
+#             '31190fec5ba90e00502f7ee1fa84b45a65483946f4a803f7e0bf5ec37bc9ff42796a14cec3362c44f363093f7adb38bafcdfe5ad2b092; __csrf=8c133a'
+#             '69f9cbf30a37e04ef55af6444f; __utma=94650624.1809290275.1472952435.1479036584.1488084383.5; __utmb=94650624.13.10.1488084383;'
+#             ' __utmc=94650624; __utmz=94650624.1472952435.1.1.utmcsr=baidu|utmccn=(organic)|utmcmd=organic; JSESSIONID-WYYY=tNIwJQl%2FDtm'
+#             'Oyn7rS0ZIu82eQA80%5CHsCXH5%2F%2F8K6R%5CBlNwvZQ1RITBNijrONoafWzflavuPO4Xe1PP6hGTdA%2Fs7aBmC3RwgNXVzh8Uexp2mVCZblsD%5Ci031fecV'
+#             'xX47CqIvWiRA8GSJwuMo%5CN2PutJCJidXuFVuJFUM39K9p52IEKPOh%3A1488086962026; _iuqxldmzr_=32'
+#     }
+#     sys.stdout = io.TextIOWrapper(sys.stdout.buffer,encoding='gb18030')      
+#     url='http://music.163.com//weapi/user/getfolloweds?csrf_token=40dfec268e143838cd39ce4c7f25b23f'
+#     print('url:'+url)
+#     r = requests.post(url,data=data,headers=header)
+#     #if len(str(r.text))>50:
+#     print(r.text)
+
 if __name__ == '__main__':
-    defollows=[]#getNoMutal()
+    # defollows=[]#getNoMutal()
+    # file = open("params&key")
+    # index=0
+    # while 1:
+    #     index=index+1
+    #     line = file.readline()
+    #     if not line:
+    #         break
+    #     else:
+    #         params=line.split('#')[0]
+    #         enSecKey=line.split('#')[1]
+    #         defollows.extend(getNoMutal(params,enSecKey))
+    # defollowed(defollows)
 
-    file = open("params&key")
-    index=0
-    while 1:
-        index=index+1
-        line = file.readline()
-        if not line:
-            break
-        else:
-            params=line.split('#')[0]
-            enSecKey=line.split('#')[1]
-            defollows.extend(getNoMutal(params,enSecKey))
-    defollowed(defollows)
-
-
+    #===============================================
+    for x in range(246047792,385801383):
+        follow(x)
+    #===============================================
+    #follow(338487101)
+    #getfollows()
 
 
    # iphoneGetFollows()
